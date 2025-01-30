@@ -17,6 +17,9 @@ class CarListingController extends Controller
             $query->where('user_id', '!=', Auth::id());
         }
 
+        // Add status filter for active cars only
+        $query->where('status', 'active');
+
         // Add relationships after the where clause
         $query = $query->with(['photos', 'user']);
 

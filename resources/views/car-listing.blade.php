@@ -224,7 +224,7 @@
                             @if ($car->approved_bid)
                                 <div
                                     class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm">
-                                    Sold
+                                    Sold Out
                                 </div>
                             @else
                                 <div
@@ -248,14 +248,12 @@
                                     <p>Mileage: {{ number_format($car->meter_usage) }} KM</p>
                                     <p class="text-lg font-bold text-black">${{ number_format($car->price) }}</p>
                                 </div>
-                                @if (!$car->approved_bid)
                                     @if (!Auth::user() || (Auth::user() && Auth::user()->role !== 'admin'))
                                         <a href="{{ route('cars.show', $car->id) }}"
                                             class="block mt-2 text-center bg-black text-white px-4 py-2 text-sm rounded hover:bg-gray-800">
                                             View Details
                                         </a>
                                     @endif
-                                @endif
 
 
                             </div>

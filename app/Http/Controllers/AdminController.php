@@ -110,6 +110,22 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Car deleted successfully');
     }
 
+    public function toggleUserStatus(User $user)
+{
+    $user->status = $user->status === 'active' ? 'deactivated' : 'active';
+    $user->save();
+    
+    return back()->with('success', 'User status updated successfully');
+}
+public function toggleCarStatus(Car $car)
+{
+    $car->status = $car->status === 'active' ? 'deactivated' : 'active';
+    $car->save();
+    
+    return back()->with('success', 'Car status updated successfully');
+}
+
+
     public function updateTestDriveStatus(Request $request, TestDrive $testDrive)
 {
     $request->validate([

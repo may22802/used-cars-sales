@@ -33,6 +33,11 @@
             font-size: clamp(2.5rem, 5vw, 3.75rem);
         }
 
+        #about h2{
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-size: clamp(1.5rem, 4vw, 2.75rem);
+        }
+
         #hero-image {
             height: 100vh;
             width: 100%;
@@ -236,10 +241,10 @@
     </section>
 
     <!-- About Us / What We Offer Section -->
-    <section id="about" class="py-20">
+    <section id="about" class=" mt-10 py-20">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold bruno-ace-regular mb-4">What We Offer</h2>
+            <div class="text-center mb-10">
+                <h2 class="text-[45px] md:text-[60px] font-bold mb-4 text-gray-900 bruno-ace-regular leading-tight">What We Offer</h2>
                 <p class="text-gray-600">Experience premium service and quality vehicles at ABC Car</p>
             </div>
 

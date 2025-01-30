@@ -386,6 +386,10 @@
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Joined Date</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -398,6 +402,13 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             {{ $user->created_at->format('Y-m-d') }}
                                         </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <button
+                                                onclick="openStatusModal('{{ $user->id }}', '{{ $user->status }}')"
+                                                class="{{ $user->status === 'active' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600' }} text-white px-4 py-2 rounded-md text-sm">
+                                                {{ $user->status === 'active' ? 'Deactivate' : 'Reactivate' }}
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -405,6 +416,27 @@
                         <div class="mt-4">
                             {{ $users->appends(['tab' => 'users'])->links() }}
                         </div>
+                    </div>
+                </div>
+                <!-- Status Change Confirmation Modal -->
+                <div id="statusModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+                    <div class="bg-white p-8 rounded-lg w-96">
+                        <h3 class="text-xl font-bold mb-4">Confirm Status Change</h3>
+                        <p id="statusMessage" class="text-gray-600 mb-6"></p>
+                        <form id="statusForm" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="flex justify-end gap-4">
+                                <button type="button" onclick="closeStatusModal()"
+                                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                    class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">
+                                    Confirm
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -457,20 +489,29 @@
                                     </div>
 
                                     <!-- Action Buttons -->
-                                    <div class="mt-3 grid grid-cols-2 border-t border-gray-200 pt-2">
+                                    <div class="mt-3 grid grid-cols-3 border-t border-gray-200 pt-2">
                                         <button onclick="openEditModal({{ $car->id }})"
                                             class="border-r border-gray-200 py-1.5 text-sm font-medium hover:bg-gray-50">
                                             Edit
+                                        </button>
+                                        <button
+                                            onclick="openCarStatusModal('{{ $car->id }}', '{{ $car->status }}')"
+                                            class="{{ $car->status === 'active' ? 'text-red-600' : 'text-green-600' }} border-r border-gray-200 py-1.5 text-sm font-medium hover:bg-gray-50">
+                                            {{ $car->status === 'active' ? 'Deactivate' : 'Reactivate' }}
                                         </button>
                                         <form action="{{ route('admin.cars.destroy', $car->id) }}" method="POST"
                                             onsubmit="return confirm('Are you sure you want to delete this car post?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="w-full py-1.5 text-sm font-medium text-red-600 hover:bg-gray-50">
-                                                Delete
+                                                class="w-full py-1.5 text-sm font-medium text-red-600 hover:bg-gray-50 flex items-center justify-center">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
                                             </button>
                                         </form>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -688,6 +729,26 @@
                     </form>
                 </div>
             </div>
+
+            <div id="carStatusModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+                <div class="bg-white p-8 rounded-lg w-96">
+                    <h3 class="text-xl font-bold mb-4">Confirm Car Status Change</h3>
+                    <p id="carStatusMessage" class="text-gray-600 mb-6"></p>
+                    <form id="carStatusForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="flex justify-end gap-4">
+                            <button type="button" onclick="closeCarStatusModal()"
+                                class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">
+                                Confirm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </main>
     </div>
 </div>
@@ -722,6 +783,26 @@
         }
     });
 
+    function openStatusModal(userId, currentStatus) {
+        const modal = document.getElementById('statusModal');
+        const message = document.getElementById('statusMessage');
+        const form = document.getElementById('statusForm');
+
+        form.action = `/admin/users/${userId}/toggle-status`;
+        message.textContent = currentStatus === 'active' ?
+            'Are you sure you want to deactivate this user?' :
+            'Are you sure you want to reactivate this user?';
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeStatusModal() {
+        const modal = document.getElementById('statusModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
     function openEditModal(carId) {
         const cars = @json($cars);
         const selectedCar = cars.find(c => c.id === carId);
@@ -742,6 +823,26 @@
     function closeEditModal() {
         document.getElementById('editCarModal').classList.add('hidden');
         document.getElementById('editCarModal').classList.remove('flex');
+    }
+
+    function openCarStatusModal(carId, currentStatus) {
+        const modal = document.getElementById('carStatusModal');
+        const message = document.getElementById('carStatusMessage');
+        const form = document.getElementById('carStatusForm');
+
+        form.action = `/admin/cars/${carId}/toggle-status`;
+        message.textContent = currentStatus === 'active' ?
+            'Are you sure you want to deactivate this car post?' :
+            'Are you sure you want to reactivate this car post?';
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeCarStatusModal() {
+        const modal = document.getElementById('carStatusModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
     }
 
     document.getElementById('userMenuButton').addEventListener('click', function() {

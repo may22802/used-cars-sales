@@ -83,7 +83,7 @@
         <form method="POST" action="{{ route('register') }}"
             class="mt-[100px] w-full max-w-6xl p-6 bg-white rounded-lg shadow-md">
             @csrf
-            <h2 class="text-2xl font-bold mb-6 text-center">Create Your Account</h2>
+            <h2 style="font-size: 20px" class="bruno-ace-regular text-2xl font-bold mb-6 text-center">Create Your Account</h2>
 
             <div class="grid grid-cols-2 gap-6">
                 <!-- Name -->

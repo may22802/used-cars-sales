@@ -14,7 +14,8 @@ class Car extends Model
         'fuel',
         'year',
         'price',
-        'meter_usage'
+        'meter_usage',
+        'status',
     ];
 
     public function photos()

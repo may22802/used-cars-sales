@@ -39,6 +39,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/admin/cars/{car}', [AdminController::class, 'updateCar'])->name('admin.cars.update');
     Route::delete('/admin/cars/{car}', [AdminController::class, 'destroyCar'])->name('admin.cars.destroy');
     Route::put('/admin/test-drives/{testDrive}', [AdminController::class, 'updateTestDriveStatus'])->name('admin.test-drives.update');
+    Route::put('/admin/users/{user}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle-status');
+    Route::put('/admin/cars/{car}/toggle-status', [AdminController::class, 'toggleCarStatus'])->name('admin.cars.toggle-status');
     Route::get('/dashboard/member', [UserController::class, 'index'])->name('user.dashboard');
     Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
     Route::post('/cars/store', [CarController::class, 'store'])->name('user.cars.store');

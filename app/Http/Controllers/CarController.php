@@ -55,4 +55,12 @@ class CarController extends Controller
 
         return response()->json($cars);
     }
+
+    public function index()
+{
+    $cars = Car::where('status', 'active')->paginate(12);
+    return view('car-listing', compact('cars'));
+}
+
+    
 }

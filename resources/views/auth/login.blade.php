@@ -82,7 +82,8 @@
     <div class="min-h-screen flex flex-col justify-center items-center pt-24 pb-12 bg-gray-100">
         <div class="w-full max-w-xl px-8">
             <div class="bg-white p-8 rounded-lg shadow-md">
-                <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Login to Your Account</h2>
+                <h2 style="font-size: 18px" class=" bruno-ace-regular font-bold mb-6 text-center text-gray-800">Login to
+                    Your Account</h2>
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
@@ -126,6 +127,14 @@
                         </x-primary-button>
                     </div>
                 </form>
+
+                <!-- Add this after the form -->
+                @if (session('status') === 'deactivated')
+                    <div class="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        <p>Your account has been deactivated. Please contact the administrator for assistance.</p>
+                    </div>
+                @endif
+
             </div>
         </div>
     </div>

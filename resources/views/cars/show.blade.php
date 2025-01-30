@@ -174,32 +174,59 @@
                             </div>
                             <div class="bg-gray-50 p-4 rounded-lg">
                                 <span class="text-gray-600 text-sm">Status</span>
-                                <p class="text-xl font-semibold text-green-600">Available</p>
+                                <p
+                                    class="text-xl font-semibold {{ $car->approved_bid ? 'text-red-600' : 'text-green-600' }}">
+                                    {{ $car->approved_bid ? 'Sold Out' : 'Available' }}
+                                </p>
                             </div>
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="flex gap-4">
                             @auth
-                                <button onclick="openBidModal()"
-                                    class="flex-1 bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
-                                    Place Bid
-                                </button>
-                                <button onclick="openTestDriveModal()"
-                                    class="flex-1 bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">
-                                    Book Test Drive
-                                </button>
+                                @if (!$car->approved_bid)
+                                    <button onclick="openBidModal()"
+                                        class="flex-1 bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
+                                        Place Bid
+                                    </button>
+                                    <button onclick="openTestDriveModal()"
+                                        class="flex-1 bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">
+                                        Book Test Drive
+                                    </button>
+                                @else
+                                    <button disabled
+                                        class="flex-1 bg-gray-300 text-gray-500 px-6 py-3 rounded-lg font-semibold cursor-not-allowed">
+                                        Place Bid
+                                    </button>
+                                    <button disabled
+                                        class="flex-1 bg-gray-300 text-gray-500 px-6 py-3 rounded-lg font-semibold cursor-not-allowed">
+                                        Book Test Drive
+                                    </button>
+                                @endif
                             @else
-                                <a href="{{ route('login') }}"
-                                    class="flex-1 bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition text-center">
-                                    Login to Place Bid
-                                </a>
-                                <a href="{{ route('login') }}"
-                                    class="flex-1 bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition text-center">
-                                    Login to Book Test Drive
-                                </a>
+                                @if (!$car->approved_bid)
+                                    <a href="{{ route('login') }}"
+                                        class="flex-1 bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition text-center">
+                                        Login to Place Bid
+                                    </a>
+                                    <a href="{{ route('login') }}"
+                                        class="flex-1 bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition text-center">
+                                        Login to Book Test Drive
+                                    </a>
+                                @else
+                                    <button disabled
+                                        class="flex-1 bg-gray-300 text-gray-500 px-6 py-3 rounded-lg font-semibold cursor-not-allowed">
+                                        Car Sold
+                                    </button>
+                                    <button disabled
+                                        class="flex-1 bg-gray-300 text-gray-500 px-6 py-3 rounded-lg font-semibold cursor-not-allowed">
+                                        Not Available
+                                    </button>
+                                @endif
                             @endauth
                         </div>
+
+
 
                     </div>
                 </div>
